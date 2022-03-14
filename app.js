@@ -12,8 +12,25 @@ app.use(cookieParser());
 
 app.use( express.urlencoded({extended:true}) )
 
+const fs = require("fs");
+//const data = fs.readFileSync('./views/insults.json')
+const data = require('./views/insults.json')
+
 app.get('/', (req ,res)=>{
     res.render('index')
+})
+
+app.get('/insult',(req, res)=>{
+        const object = data
+        const rand = Math.floor(Math.random() * Object.keys(object).length);
+        const randKey = object[rand]
+        let result = randKey
+        res.render('randinsults', {result: result})
+})
+app.get('/insult/:severity',(req, res)=>{
+    let resul= req.params.severity
+    let result = data.filter( ({ severity }) => severity == resul);
+    res.render('insult', {result: result})
 })
 
 app.listen(8000)

@@ -1,0 +1,26 @@
+ [
+        {
+            "id": 1,
+            "insult": "Were such things here as we do speak about? Or have we eaten on the insane root That takes the reason prisoner?",
+            "author": "Macbeth",
+            "severity": "vg"
+        },
+        {
+            "id": 2,
+            "insult": "Never hung poison on a fouler toad",
+            "author": "Richard III",
+            "severity": "g"
+        },
+        {
+            "id": 3,
+            "insult": "He thinks too much: such men are dangerous.",
+            "author": "Julius Ceasar",
+            "severity": "ig"   
+        },
+        {
+            "id": 4,
+            "insult": "He thinks too much: such men are dangerous.",
+            "author": "Julius Ceasar",
+            "severity": "g"   
+        }
+    ]
