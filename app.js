@@ -1,7 +1,7 @@
 //-------------task number two-----------------------//
 const express = require('express')
 
-const { cookie, get } = require('express/lib/response')
+const { cookie, get, render } = require('express/lib/response')
 
 const app = express()
 
@@ -28,6 +28,13 @@ app.post('/chat', (req, res)=>{
     res.render('chat', {messages: messages})
 })
 
+app.get('/chat', (req, res)=>{
+    res.render('chat', {messages: messages})
+})
+
+app.get('/messages', (req, res)=>{
+    res.render('chat', {messages: messages})
+})
 app.post('/messages', (req, res)=>{
     let mes = req.body.umessage
     messages.push({
@@ -35,10 +42,17 @@ app.post('/messages', (req, res)=>{
         message: req.body.umessage,
         time: Date.now()
     })
-    res.render('chat', {messages: messages})
-    res.send({computer:'MyComputer',ip:'192.168.0.1'});
-
+    res.redirect( '/chat')
+    //res.send({computer:'MyComputer',ip:'192.168.0.1'});
 })
+
+app.get('/messages/:time', (req, res)=>{
+    let timeStamp= req.params.time
+    let result = messages.filter( ({ time }) => time == timeStamp);
+     messages = result
+    res.render('chat', {messages: messages})
+})
+
 app.listen(8000)
 //------------- insult ------------------//
 
