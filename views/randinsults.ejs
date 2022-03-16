@@ -7,10 +7,19 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>read insults</h1>
-    <p><%= result.id%></p>
-    <p><%= result.insult%></p>
-    <p><%= result.author%></p>
-    <p><%= result.severity%></p>
+    
+    <h1>Renders a random insult</h1>
+    <button>
+        <a href="/insult"> Rand ny insult</a>
+    </button>
+    <button>
+        <a href="insult/<%= result.severity%>"> Rand ny insult med Severity</a>
+    </button>
+    <button>
+    <a href="/">Back</a></button>
+    <p>ID: <%= result.id%></p>
+    <p>Insult: <%= result.insult%></p>
+    <p>Author: <%= result.author%></p>
+    <p>Severity: <%= result.severity%></p>
 </body>
-</html>
+</html 

@@ -8,7 +8,30 @@
 </head>
 <body>
     <h1>Hello World</h1>
-    <button onclick="move()">User Name</button>
+    <button>
+        <a href="/insult"> Rand ny insult</a>
+    </button>
+    <button>
+        <a href="/insults"> Creat New Insult</a>
+    </button>
+    <p>
+        <% for (const obj of data) {%>
+            <article>
+                <label> ID: <%= obj.id%>
+                Insult :<%= obj.insult%>
+                Author :<%= obj.author%></label>
+                <button>
+                    <a href="insult/<%=obj.severity%>""> Severity : <%=obj.severity%></a>
+                </button>
+                <button>
+                    <a href="insults/<%=obj.id%>"">Uppdate Insults</a>
+                </button>
+            </article>
+       <%}%>
+    </p>
+
+
+    <!-- <button onclick="move()">User Name</button>
     <button onclick="caht()">Start caht</button>
     <script>
         function move(){
@@ -17,7 +40,7 @@
         function chat(){
             window.location.href = '/chat'
         }
-      </script>
+      </script> -->
     
 </body>
 </html>

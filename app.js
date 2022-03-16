@@ -12,73 +12,117 @@ app.use(cookieParser());
 
 app.use( express.urlencoded({extended:true}) )
 
-let messages =[]
+// let messages =[]
 
-app.get('/', (req, res)=>{
-    res.render('index')
-})
-
-app.get('/userName',(req, res)=>{
-    res.render('username')
-})
-
-app.post('/chat', (req, res)=>{
-    let name = req.body.uname
-    res.cookie('userName', `${name}`)
-    res.render('chat', {messages: messages})
-})
-
-app.get('/chat', (req, res)=>{
-    res.render('chat', {messages: messages})
-})
-
-app.get('/messages', (req, res)=>{
-    res.render('chat', {messages: messages})
-})
-app.post('/messages', (req, res)=>{
-    let mes = req.body.umessage
-    messages.push({
-        author: req.cookies.userName,
-        message: req.body.umessage,
-        time: Date.now()
-    })
-    res.redirect( '/chat')
-    //res.send({computer:'MyComputer',ip:'192.168.0.1'});
-})
-
-app.get('/messages/:time', (req, res)=>{
-    let timeStamp= req.params.time
-    let result = messages.filter( ({ time }) => time == timeStamp);
-     messages = result
-    res.render('chat', {messages: messages})
-})
-
-app.listen(8000)
-//------------- insult ------------------//
-
-// const fs = require("fs");
-// const data = require('./views/insults.json')
-
-// app.get('/', (req ,res)=>{
+// app.get('/', (req, res)=>{
 //     res.render('index')
 // })
 
-// app.get('/insult',(req, res)=>{
-//         const object = data
-//         const rand = Math.floor(Math.random() * Object.keys(object).length);
-//         const randKey = object[rand]
-//         let result = randKey
-//         res.render('randinsults', {result: result})
+// app.get('/userName',(req, res)=>{
+//     res.render('username')
 // })
-// app.get('/insult/:severity',(req, res)=>{
-//     let resul= req.params.severity
-//     let result = data.filter( ({ severity }) => severity == resul);
-//     res.render('insult', {result: result})
+
+// app.post('/chat', (req, res)=>{
+//     let name = req.body.uname
+//     res.cookie('userName', `${name}`)
+//     res.render('chat', {messages: messages})
+// })
+
+// app.get('/chat', (req, res)=>{
+//     res.render('chat', {messages: messages})
+// })
+
+// app.get('/messages', (req, res)=>{
+//     res.render('chat', {messages: messages})
+// })
+// app.post('/messages', (req, res)=>{
+//     let mes = req.body.umessage
+//     messages.push({
+//         author: req.cookies.userName,
+//         message: req.body.umessage,
+//         time: Date.now()
+//     })
+//     res.redirect( '/chat')
+//     //res.send({computer:'MyComputer',ip:'192.168.0.1'});
+// })
+
+// app.get('/messages/:time', (req, res)=>{
+//     let timeStamp= req.params.time
+//     let result = messages.filter( ({ time }) => time == timeStamp);
+//      messages = result
+//     res.render('chat', {messages: messages})
 // })
 
 // app.listen(8000)
+//------------- insult ------------------//
 
-//-------------cookie counter --------------------//
+const fs = require("fs");
+
+
+app.get('/', (req ,res)=>{
+    const jsonData = fs.readFileSync('./views/insults.json', {encoding: 'utf8'})
+    const data= JSON.parse(jsonData)
+    res.render('index' ,{data})
+})
+
+app.get('/insult',(req, res)=>{
+        const jsonData = fs.readFileSync('./views/insults.json', {encoding: 'utf8'})
+        const data= JSON.parse(jsonData)
+        const object = data
+        const rand = Math.floor(Math.random() * Object.keys(object).length);
+        const randKey = object[rand]
+        let result = randKey
+        res.render('randinsults', {result})
+})
+app.get('/insult/:severity',(req, res)=>{
+    const jsonData = fs.readFileSync('./views/insults.json', {encoding: 'utf8'})
+    const data= JSON.parse(jsonData)
+    let resul= req.params.severity
+    let result = data.filter( ({ severity }) => severity == resul);
+    res.render('insult', {result: result})
+})
+
+app.get('/insults', (req, res)=>{
+
+    res.render('newinsults')
+})
+
+app.post('/insults', (req,res)=>{
+    const {insult,author,severity}= req.body
+    let id = Math.floor(Math.random() * 100);
+    let jsonData = fs.readFileSync('./views/insults.json', {encoding: 'utf8'})
+    let insults = JSON.parse(jsonData)
+    insults.push({
+        id, insult, author, severity
+    })
+    fs.writeFileSync('./views/insults.json', JSON.stringify(insults))
+    res.redirect('/')
+})
+app.get('/insults/:id', (req, res)=>{
+    let id = req.params.id
+    let jsonData = fs.readFileSync('./views/insults.json', {encoding: 'utf8'})
+    let insults = JSON.parse(jsonData)
+    const data = insults.find(result => result.id == id)
+    console.log(data)
+    res.render('updateinsult', {data})
+})
+
+app.post('/insults/:id', (req, res)=>{
+    const {insult,author,severity}= req.body
+    let id = req.params.id
+    let jsonData = fs.readFileSync('./views/insults.json', {encoding: 'utf8'})
+    let insults = JSON.parse(jsonData)
+    const data = insults.findIndex(result => result.id == id)
+        insults[data].id = id
+        insults[data].insult = insult
+        insults[data].author = author
+        insults[data].severity = severity
+    fs.writeFileSync('./views/insults.json', JSON.stringify(insults))
+    res.redirect('/')
+})
+app.listen(8000)
+
+// -------------cookie counter --------------------//
 // let total = 0
 // app.get('/', (req , res)=>{
 //     res.render('index')
